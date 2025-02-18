@@ -1,7 +1,6 @@
 import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import userRoutes from "./routes/user.route.js";
@@ -15,14 +14,14 @@ app.use(urlencoded({
     limit: '2mb'
 }))
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true,
+    origin: ["http://localhost:5173","https://p-chat-pro.netlify.app"],
+    credentials: true, //Allow cookies and authentication headers
 }));
 app.use(cookieParser());
 
-// app.get("/",(req,res)=>{
-//     res.send("welcome pchatpro");
-// })
+app.get("/",(req,res)=>{
+    res.send("welcome pchatpro");
+})
 
 app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
