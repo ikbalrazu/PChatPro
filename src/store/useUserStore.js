@@ -15,6 +15,7 @@ export const useUserStore = create((set)=>({
         set({ isUsersLoading: true });
         try {
             const response = await axiosInstance.get("/user/my-friends");
+            console.log(response);
             set({myFriends: response.data});
         } catch (error) {
             toast.error(error.message);
