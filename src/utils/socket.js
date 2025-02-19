@@ -10,7 +10,8 @@ const io = new Server(server, {
         origin: ["http://localhost:5173","https://p-chat-pro.netlify.app"],
         methods: ["GET", "POST"],
         credentials: true
-    }
+    },
+    transports: ["websocket", "polling"] // 👈 Allow WebSocket + Polling for cross-origin support
 });
 
 export function getReceiverSocketId(userId){
