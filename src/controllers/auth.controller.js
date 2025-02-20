@@ -118,7 +118,7 @@ export const ForgotPassword = async(req,res)=>{
         });
 
         if(process.env.NODE_ENV === "production"){
-            resetLink = `https://p-chat-pro.onrender.com/forgot-password/reset-password/${user._id}/${jwtToken}`;
+            resetLink = `https://p-chat-pro.netlify.app/forgot-password/reset-password/${user._id}/${jwtToken}`;
         }
         
         resetLink = `http://localhost:5173/forgot-password/reset-password/${user._id}/${jwtToken}`;
