@@ -11,7 +11,7 @@ import ResetPassword from './components/forgotpassword/ResetPassword';
 
 const App = () => {
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
-
+  console.log(import.meta.env);
   useEffect(()=>{
     checkAuth(); 
   },[checkAuth]);

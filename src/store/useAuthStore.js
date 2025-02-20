@@ -162,7 +162,11 @@ export const useAuthStore = create((set, get) => ({
             // "http://localhost:5000",
             BASE_URL,
             // { withCredentials: true },
-            {query: {userId: authUser._id}}
+            {   
+                transports: ["websocket","polling"],
+                withCredentials: true,
+                query: {userId: authUser._id}
+            }
         );
         socketInstance.connect();
         // socketInstance.on("connect", () => {
