@@ -23,10 +23,11 @@ export const useAuthStore = create((set, get) => ({
     onlineUsers: [],
     notifications: [],
 
+    emailSent: false,
+
     checkAuth: async()=>{
         try {
             const res = await axiosInstance.get("/auth/check");
-            console.log(res);
             set({authUser: res?.data});
             set({friendList: res?.data?.friends});
             set({friendRequestList: res?.data?.friendRequests});
@@ -37,7 +38,6 @@ export const useAuthStore = create((set, get) => ({
                 }, 100);
             }
         } catch (error) {
-            console.log("Error in checkAuth:", error);
             set({ authUser: null });
             // toast.error(error.message);
         }finally{
@@ -94,15 +94,16 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
-    forgotPassword: async(email)=>{
+    forgotPassword: async(email,navigate)=>{
         try {
-            console.log(email);
             const res = await axiosInstance.post("/auth/forgot-password",{email});
             if(res.data.message === "Password reset email sent successfully"){
                 toast.success("Email Send Successfully!");
-                // navigate("/login");
+                // navigate("/reset-password-success");
+                set({emailSent: true});
             }
         } catch (error) {
+            set({emailSent: false});
             const errorMessage = error?.response?.data?.error || "Something went wrong!";
             toast.error(errorMessage);
         }
@@ -126,6 +127,10 @@ export const useAuthStore = create((set, get) => ({
             // const errorMessage = error?.response?.data?.message || "Something went wrong.";
             // toast.error(errorMessage);
         }
+    },
+
+    resetPassword: async(id, token, password)=>{
+        console.log(id,token,password)
     },
 
     updateProfilePic: async(imagedata)=>{
