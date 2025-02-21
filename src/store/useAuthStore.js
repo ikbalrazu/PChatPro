@@ -18,6 +18,7 @@ export const useAuthStore = create((set, get) => ({
     userProfileShow: false,
 
     tokenValidity: null,
+    passUpdated: false,
 
     socket: null,
     onlineUsers: [],
@@ -99,7 +100,6 @@ export const useAuthStore = create((set, get) => ({
             const res = await axiosInstance.post("/auth/forgot-password",{email});
             if(res.data.message === "Password reset email sent successfully"){
                 toast.success("Email Send Successfully!");
-                // navigate("/reset-password-success");
                 set({emailSent: true});
             }
         } catch (error) {
@@ -111,26 +111,33 @@ export const useAuthStore = create((set, get) => ({
 
     verifyJWTToken: async(token)=>{
         try {
-            const {tokenValidity} = get();
-            console.log(token);
+            
             const res = await axiosInstance.post("/auth/verify-jwt-token",{token});
-            console.log(res);
+        
             if(res.data.message === "Valid Link"){
                 set({ tokenValidity: true });
-                // toast.success("Valid Link!");
             }else{
                 set({ tokenValidity: false });
-                // toast.error(res.data.message || "Invalid or expired token.");
             }
         } catch (error) {
             set({ tokenValidity: false });
-            // const errorMessage = error?.response?.data?.message || "Something went wrong.";
-            // toast.error(errorMessage);
         }
     },
 
-    resetPassword: async(id, token, password)=>{
-        console.log(id,token,password)
+    resetPassword: async(id,password)=>{
+        try {
+            const res = await axiosInstance.put("/auth/reset-password",{id,password});
+            
+            if(res.data.message === "Password Updated"){
+                toast.success("Successfully Password Updated!");
+                set({passUpdated:true})
+            }
+            
+        } catch (error) {
+            set({passUpdated:false})
+            const errorMessage = error?.response?.data?.message || "Something went wrong.";
+            toast.error(errorMessage);
+        }
     },
 
     updateProfilePic: async(imagedata)=>{

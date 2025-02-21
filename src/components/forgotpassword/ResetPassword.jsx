@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const ResetPassword = () => {
-  const {verifyJWTToken,tokenValidity, resetPassword } = useAuthStore();
+  const {verifyJWTToken, tokenValidity, resetPassword, passUpdated } = useAuthStore();
   const { id, token } = useParams();
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     password: Yup.string()
@@ -33,7 +34,15 @@ const ResetPassword = () => {
 
   useEffect(()=>{
     verifyJWTToken(token);
-  },[]);
+  },[tokenValidity]);
+
+  useEffect(()=>{
+    if(passUpdated === true){
+      setTimeout(()=>{
+        navigate("/");
+      },3000);
+    }
+  },[passUpdated, navigate]);
 
   return (
     <div className='flex flex-col min-h-screen p-6'>
@@ -42,7 +51,13 @@ const ResetPassword = () => {
             <a>Need Help?</a>
         </div>
         <div className='flex flex-col justify-center items-center gap-4 mt-5'>
-          {tokenValidity === null ? (
+          {passUpdated ? (
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-green-600">Password Updated!</h2>
+              <p className="text-md text-[#002D74]">Your password has been successfully updated.</p>
+              <p className="text-md text-[#002D74]">Redirecting to login page...</p>
+            </div>
+          ) : tokenValidity === null ? (
             <p className="text-md text-[#002D74]">Verifying token...</p>
           ): tokenValidity ? (
             <>
@@ -77,13 +92,17 @@ const ResetPassword = () => {
                 className='mt-5 bg-[#002D74] rounded-xl text-white py-2'
                 disabled={formik.isSubmitting}
                 >
-                  {formik.isSubmitting ? "Processing..." : "Continue"}
+                  {formik.isSubmitting ? "Updating..." : "Confirm"}
                 </button>
             </form>
            
             </>
           ): (
-            <p className="text-red-500 text-lg font-semibold">Invalid token</p>
+            <div>
+            <p className="text-red-500 text-lg font-semibold">Link Expired</p>
+            <p className='mb-5'>The reset password link is either invalid or expired. Generate a new link, you can request a new reset email.</p>
+            <Link to="/forgot-password" className='bg-[#1e4f9d] rounded-xl text-sm text-white p-2'>Request a new reset email</Link>
+            </div>
           )}
             
         </div>
