@@ -114,7 +114,7 @@ export const ForgotPassword = async(req,res)=>{
 
         //generate reset token
         const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-            expiresIn: "5m",
+            expiresIn: "30m",
         });
 
         if(process.env.NODE_ENV === "production"){
@@ -181,6 +181,28 @@ export const VerifyJWTToken = async(req,res)=>{
             }
             res.status(200).json({ message: "Valid Link" });
         });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const resetPassword = async (req,res) =>{
+    try {
+        const {id, password} = req.body;
+        const user = await User.findById(id);
+
+        if(!user){
+            return res.status(400).json({message:"User not found"});
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({message:"Password Updated"});
+        
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
     }
