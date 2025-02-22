@@ -23,7 +23,6 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
       email: "",
       password: "",
     },
@@ -35,7 +34,7 @@ const Login = () => {
 
   useEffect(() => {
     authUser
-  }, [])
+  }, []);
 
   return (
     <section className='bg-gray-60 min-h-screen flex justify-center items-center'>

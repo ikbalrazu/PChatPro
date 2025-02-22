@@ -26,7 +26,7 @@ const ResetPassword = () => {
     },
       validationSchema, // Attach Yup schema
       onSubmit: async(values, {setSubmitting}) => {
-        await resetPassword(id, token, values.password);
+        await resetPassword(id, values.password);
         setSubmitting(false);
         
       },
