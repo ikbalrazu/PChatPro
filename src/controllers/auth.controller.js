@@ -58,20 +58,23 @@ export const Signup = async (req,res) =>{
 export const Login = async(req,res) =>{
     const {email, password} = req.body;
     try {
+        
         if(!email || !password){
             return res.status(400).json({message:"All fields required"});
         }
-        const user = await User.findOne({email})
+        const user = await User.findOne({email});
+        
         if(!user){
             return res.status(400).json({message:"Invalid credentials"});
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
         if(!isPasswordCorrect){
             return res.status(400).json({message: "Invalid credentials"});
         }
 
-        generateToken(user._id, res);
+        await generateToken(user._id, res);
 
         res.status(200).json({
             _id: user._id,
@@ -100,14 +103,14 @@ export const Logout = (req,res) =>{
 
 export const ForgotPassword = async(req,res)=>{
     const {email} = req.body;
-    let resetLink;
+    // let resetLink;
     try {
         if (!email) {
             return res.status(400).json({ error: "Email is required" });
         }
         // console.log(email);
         const user = await User.findOne({ email });
-        console.log(user);
+        
         if(!user){
            return res.status(404).json({error: "Email not found"})
         }
@@ -117,12 +120,14 @@ export const ForgotPassword = async(req,res)=>{
             expiresIn: "30m",
         });
 
-        if(process.env.NODE_ENV === "production"){
-            resetLink = `https://p-chat-pro.netlify.app/forgot-password/reset-password/${user._id}/${jwtToken}`;
-        }
-        
-        resetLink = `http://localhost:5173/forgot-password/reset-password/${user._id}/${jwtToken}`;
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
+        // if(process.env.NODE_ENV === "production"){
+        //     resetLink = `https://p-chat-pro.netlify.app/forgot-password/reset-password/${user._id}/${jwtToken}`;
+        // }
+        
+        const resetLink = `${frontendUrl}/forgot-password/reset-password/${user._id}/${jwtToken}`;
+        
         // Email template
         const mailOptions = {
             from: '"Reset Your Password" <P-Chat-Pro>',
@@ -190,7 +195,6 @@ export const resetPassword = async (req,res) =>{
     try {
         const {id, password} = req.body;
         const user = await User.findById(id);
-
         if(!user){
             return res.status(400).json({message:"User not found"});
         }
