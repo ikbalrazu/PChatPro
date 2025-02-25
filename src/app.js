@@ -16,6 +16,8 @@ app.use(urlencoded({
 app.use(cors({
     origin: ["http://localhost:5173","https://p-chat-pro.netlify.app"],
     credentials: true, //Allow cookies and authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(cookieParser());
 
