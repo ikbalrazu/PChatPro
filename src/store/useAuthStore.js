@@ -81,7 +81,7 @@ export const useAuthStore = create((set, get) => ({
     logout: async(navigate)=>{
         try {
             const {disconnectSocket} = get();
-            const res = await axiosInstance.post("/auth/logout");
+            const res = await axiosInstance.post("/auth/logout",{},{withCredentials:true});
             console.log(res.data.message);
             if(res.data.message === "Logged out successfully"){
                 disconnectSocket();
