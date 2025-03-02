@@ -22,7 +22,6 @@ const UserProfile = () => {
         .max(100, "Bio cannot exceed 100 characters"),
     }),
     onSubmit: async (values) => {
-      console.log("Updated Profile:", values);
       await updateProfileInfo(values); // Call the API
       setIsEditing(false); // Disable editing after save
     },

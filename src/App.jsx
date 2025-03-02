@@ -12,8 +12,6 @@ import MailSentSuccess from './components/forgotpassword/MailSentSuccess';
 
 const App = () => {
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
-
-  console.log(authUser);
   
   useEffect(()=>{
     checkAuth(); 

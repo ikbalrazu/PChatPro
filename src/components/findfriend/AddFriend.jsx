@@ -26,7 +26,6 @@ const AddFriend = () => {
     setMessage('');
     try {
       const response = await axiosInstance.get(`/user/search-friends?query=${searchQuery}`);
-      console.log(response);
       if (response.data.users.length === 0) {
         setMessage('No users found.');
       } else {

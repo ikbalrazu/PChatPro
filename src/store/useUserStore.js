@@ -15,7 +15,6 @@ export const useUserStore = create((set)=>({
         set({ isUsersLoading: true });
         try {
             const response = await axiosInstance.get("/user/my-friends",{ withCredentials: true });
-            console.log(response);
             set({myFriends: response.data});
         } catch (error) {
             toast.error(error.message);
@@ -26,9 +25,7 @@ export const useUserStore = create((set)=>({
 
     friendRequest: async(receiverId)=>{
         try {
-            console.log(receiverId);
             const response = await axiosInstance.post("/user/friend-request",{receiverId});
-            console.log(response);
         } catch (error) {
             toast.error(error.message);
         }
@@ -36,9 +33,7 @@ export const useUserStore = create((set)=>({
 
     searchFriends: async(query)=>{
         try {
-            console.log(query);
             const response = await axiosInstance.get(`/user/search-friends?query=${query}`);
-            console.log(response);
             if (response.data.users) {
                 set({searchQueryResults:response.data.users})
             }
