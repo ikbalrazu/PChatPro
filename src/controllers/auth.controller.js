@@ -92,7 +92,14 @@ export const Login = async(req,res) =>{
 
 export const Logout = (req,res) =>{
     try {
-        res.cookie("authToken", "", {maxAge:0});
+        // res.cookie("authToken", "", {maxAge:0});
+        res.cookie("authToken", "", {
+            expires: new Date(0), // Expire the cookie immediately
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            path: "/",
+        });
         res.status(200).json({message:"Logged out successfully"});
         
     } catch (error) {
