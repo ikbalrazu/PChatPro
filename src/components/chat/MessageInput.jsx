@@ -17,17 +17,16 @@ const MessageInput = () => {
 
     // Function to check for harmful images
   const checkImageForHarmfulness = async (imageBase64) => {
-    console.log(imageBase64);
     try {
-      const model = await nsfwjs?.load();
+      const model = await nsfwjs?.load("models/model.json");
       const img = new window.Image(); // Create an HTML image element
       img.crossOrigin = "anonymous"; // Handle CORS issues
       img.src = imageBase64; // Set the Base64 string as the image source
+
       return new Promise((resolve)=>{
         img.onload = async()=>{
           try {
             const predictions = await model.classify(img);
-            console.log("NSFW Predictions:", predictions);
             const harmful = predictions.some(
               (p) =>
                 (["Porn", "Hentai", "Sexy"].includes(p.className) && p.probability > 0.7) ||
@@ -35,19 +34,20 @@ const MessageInput = () => {
             );
             resolve(harmful);
           } catch (error) {
-            console.error("NSFWJS Classification Error:", error);
             resolve(false);
+          }finally{
+            setLoading(false);
           }
         };
 
         img.onerror = () => {
-          console.error("Error loading image for NSFW detection.");
-          return false;
-        }
+          resolve(false);
+          setLoading(false);
+          // return false;
+        };
 
       });
     } catch (error) {
-        console.error("Error detecting harmful image:", error);
         return false;
       }
     };
@@ -69,16 +69,16 @@ const MessageInput = () => {
 
         reader.onloadend = async()=>{
           setLoading(true);
-          // const imageBase64 = reader.result;
-          // const isHarmful = await checkImageForHarmfulness(imageBase64);
-          // if(isHarmful){
-          //   toast.error("Harmful content detected. Please choose another image.");
-          //   setImagePreview(null);
-          //   if (fileInputRef.current) fileInputRef.current.value = "";
-          // }else{
-          //   setImagePreview(reader.result);
-          // }
-          setImagePreview(reader.result);
+          const imageBase64 = reader.result;
+          const isHarmful = await checkImageForHarmfulness(imageBase64);
+          if(isHarmful){
+            toast.error("Harmful content detected. Please choose another image.");
+            setImagePreview(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+          }else{
+            setImagePreview(reader.result);
+          }
+          // setImagePreview(reader.result);
           setLoading(false);
         }
         reader.readAsDataURL(file);
@@ -113,7 +113,7 @@ const MessageInput = () => {
             textareaRef.current.style.height = "auto"; // Reset height to default
           }
         } catch (error) {
-          console.error("Failed to send message:", error.message);
+          toast.error("Failed to send message:", error.message);
         }
     };
 
@@ -177,12 +177,12 @@ const MessageInput = () => {
 
             <button
             type="button"
-            className={`flex btn btn-circle items-center
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+            className={`flex btn btn-circle items-center 
+                     ${imagePreview ? "text-zinc-400" : "text-emerald-500"}`}
             onClick={() => fileInputRef.current?.click()}
             disabled = {loading} 
             >
-            {loading ? "..." : <Image size={25} />}
+            {loading ? "" : <Image size={25} />}
           </button>
             </div>
             <button 
