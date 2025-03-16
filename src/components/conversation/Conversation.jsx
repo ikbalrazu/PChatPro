@@ -41,6 +41,7 @@ const Conversation = () => {
             className="w-full p-3 h-1 text-sm rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2"
           />
         </div>
+        {/* <button className='text-sm bg-slate-300 m-1'>Online</button> */}
       </div>
 
       <div className="h-[86%] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">

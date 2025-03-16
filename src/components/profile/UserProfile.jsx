@@ -37,6 +37,7 @@ const UserProfile = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col h-screen w-full bg-white dark:bg-gray-800  border-r border-gray-300">
         {/* Profile Picture */}
         <Upload_Profile/>
@@ -89,7 +90,7 @@ const UserProfile = () => {
             )}
           </div>
 
-<div className="flex justify-end mt-2">
+          <div className="flex justify-end mt-2">
           <button
             type="button"
             onClick={handleEditClick}
@@ -106,8 +107,14 @@ const UserProfile = () => {
 
         </div>
         </form>
-        
+      
+      
     </div>
+
+  <div className="flex justify-start mb-10 ml-5">
+    <button className="text-sm text-red-800 corsor-pointer hover:text-red-900">Delete Account</button>
+  </div>
+  </>
   );
 };
 
