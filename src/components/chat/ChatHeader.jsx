@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { IoIosArrowBack } from "react-icons/io";
 import { useChatStore } from '../../store/useChatStore';
 import { useAuthStore } from '../../store/useAuthStore';
 import Avatar from '../Avatar';
 import { useUtilityStore } from '../../store/useUtilityStore';
+import FriendProfile from './FriendProfile';
 
 const ChatHeader = () => {
     const {selectedUser, setSelectedUser } = useChatStore();
@@ -11,6 +12,30 @@ const ChatHeader = () => {
     const {toggleSidebar} = useUtilityStore();
 
     const navigate = useUtilityStore((state) => state.navigate);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedFriend, setSelectedFriend] = useState(null);
+
+    const friend = {
+        fullName: "John Doe",
+        username: "johndoe",
+        email: "john@example.com",
+        profilePic: "https://randomuser.me/api/portraits/men/75.jpg",
+        createdAt: "2024-01-15T10:30:00Z",
+        status: "Available",
+    };
+
+    // Function to open modal
+    const openProfileModal = (friend) => {
+        setSelectedFriend(friend);
+        setIsModalOpen(true);
+    };
+
+    // Function to close modal
+    const closeProfileModal = () => {
+        setIsModalOpen(false);
+        setSelectedFriend(null);
+    };
 
     const handleBackClick = () => {
         setSelectedUser(null); // Clear the selected user to show the Conversation component
@@ -29,7 +54,9 @@ const ChatHeader = () => {
                     <IoIosArrowBack size={20} />
                 </button>
 
-                <div className="w-10 h-10 text-white rounded-full flex items-center justify-center border">
+                <div className="w-10 h-10 text-white rounded-full flex items-center justify-center border cursor-pointer"
+                onClick={() => openProfileModal(selectedUser)}
+                >
                     <Avatar
                     width={40}
                     height={40}
@@ -54,10 +81,18 @@ const ChatHeader = () => {
                 <button className="p-2 hover:bg-gray-200 rounded-full">
                     🎥
                 </button>
-                <button className="p-2 hover:bg-gray-200 rounded-full">
+                <button className="p-2 hover:bg-gray-200 rounded-full"
+                
+                >
                     ⚙️
                 </button>
             </div>
+            {/* Profile Modal */}
+        <FriendProfile
+            isOpen={isModalOpen}
+            closeModal={closeProfileModal}
+            friend={selectedFriend}
+        />
         </div>
     )
 }
