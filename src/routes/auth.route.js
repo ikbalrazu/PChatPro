@@ -1,5 +1,5 @@
 import express from "express";
-import { checkAuth, ForgotPassword, resetPassword, Login, Logout, Signup, updateProfileInfo, updateProfilePic, VerifyJWTToken } from "../controllers/auth.controller.js";
+import { checkAuth, ForgotPassword, resetPassword, Login, Logout, Signup, updateProfileInfo, updateProfilePic, VerifyJWTToken, deleteAccount } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -15,5 +15,7 @@ router.put("/update-profile", protectRoute, updateProfilePic);
 router.put("/update-profileinfo",protectRoute, updateProfileInfo);
 
 router.get("/check", protectRoute, checkAuth);
+
+router.get("/delete-account", protectRoute, deleteAccount);
 
 export default router;

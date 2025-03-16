@@ -270,6 +270,18 @@ export const updateProfileInfo = async(req,res)=>{
     }
 }
 
+export const deleteAccount = async(req,res)=>{
+    try {
+        const user = req.user;
+        await User.findByIdAndDelete(user._id);
+        res.status(200).json({ message: "Account deleted successfully" });
+        
+    } catch (error) {
+        res.status(500).json({ message: "Something went wrong" });
+    }
+    
+}
+
 export const checkAuth = async(req, res) =>{
     try {
         const user = req.user;
