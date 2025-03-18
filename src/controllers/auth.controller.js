@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Message from "../models/message.model.js";
 import bcrypt from 'bcrypt';
 import { generateToken } from "../utils/jwtToken.js";
 import cloudinary from "../utils/cloudinary.js";
@@ -272,8 +273,15 @@ export const updateProfileInfo = async(req,res)=>{
 
 export const deleteAccount = async(req,res)=>{
     try {
-        const user = req.user;
-        await User.findByIdAndDelete(user._id);
+        const userId = req.user._id;
+        await User.updateMany(
+            { friends: userId },
+            { $pull: { friends: userId } } // Remove user ID from friends list
+        );
+        await Message.deleteMany(
+            { senderId: userId }
+        );
+        await User.findByIdAndDelete(userId);
         res.status(200).json({ message: "Account deleted successfully" });
         
     } catch (error) {
