@@ -3,6 +3,7 @@ import Upload_Profile from "./Upload_Profile";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import DeleteAccount from "./DeleteAccount";
 
 const UserProfile = () => {
   const {authUser, updateProfileInfo, isUpdatingProfileInfo} = useAuthStore();
@@ -107,13 +108,9 @@ const UserProfile = () => {
 
         </div>
         </form>
-      
-      
     </div>
-
-  <div className="flex justify-start mb-10 ml-5">
-    <button className="text-sm text-red-800 corsor-pointer hover:text-red-900">Delete Account</button>
-  </div>
+    
+    <DeleteAccount/>
   </>
   );
 };

@@ -164,6 +164,18 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    deleteAccount: async()=>{
+        try {
+            const res = await axiosInstance.get("/auth/delete-account");
+            if(res.data.message === "Account deleted successfully"){
+                toast.success("Account deleted successfully!");
+                set({authUser:null});
+            }
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    },
+
     connectSocket: () => {
         const {authUser,socket} = get();
         if(!authUser || (socket && socket.connected)) return;
