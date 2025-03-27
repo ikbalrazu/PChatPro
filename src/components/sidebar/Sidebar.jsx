@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { BiLogOut } from "react-icons/bi";
 import { FaUserPlus } from "react-icons/fa";
+import { IoNotificationsOutline } from "react-icons/io5";
 import Avatar from '../Avatar';
 import { useAuthStore } from '../../store/useAuthStore';
 import { NavLink } from 'react-router-dom';
@@ -41,6 +42,19 @@ const Sidebar = () => {
     overflow-hidden
     h-screen
     ">
+    <NavLink 
+        className={({isActive})=>`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-200`}
+        onClick={() => navigate('notificationpanel')}
+        title='Notification'
+        >
+            <IoNotificationsOutline size={20}/>
+            {/* {notifications.length > 0 && (
+            <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1">
+              {notifications.length}
+            </span>
+            )} */}
+      </NavLink>
+
       <NavLink 
         className={({isActive})=>`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-200`}
         onClick={() => navigate('conversation')}

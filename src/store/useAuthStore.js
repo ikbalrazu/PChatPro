@@ -169,6 +169,7 @@ export const useAuthStore = create((set, get) => ({
             const res = await axiosInstance.get("/auth/delete-account");
             if(res.data.message === "Account deleted successfully"){
                 toast.success("Account deleted successfully!");
+                get().connectSocket()
                 set({authUser:null});
             }
         } catch (error) {
@@ -193,6 +194,13 @@ export const useAuthStore = create((set, get) => ({
         // socketInstance.on("connect", () => {
         //     console.log("Socket connected:", socketInstance.id);
         // });
+
+        socketInstance.on("notification", (notification) => {
+            console.log("🔔 New Notification:", notification);
+            set((state) => ({
+                notifications: [...state.notifications, notification]
+            }));
+        });
         
         set({ socket: socketInstance });
 
@@ -201,9 +209,9 @@ export const useAuthStore = create((set, get) => ({
         });
 
         // Listen for notifications
-        socketInstance.on("notification", (notification) => {
-            set((prev) => [...prev, notification]);
-        });
+        // socketInstance.on("notification", (notification) => {
+        //     set((prev) => [...prev, notification]);
+        // });
     },
 
     disconnectSocket: () => {

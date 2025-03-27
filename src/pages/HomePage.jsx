@@ -8,6 +8,7 @@ import { useChatStore } from '../store/useChatStore';
 import NotSelectedUser from '../components/conversation/NotSelectedUser';
 import { useUtilityStore } from '../store/useUtilityStore';
 import AddFriend from '../components/findfriend/AddFriend';
+import NotificationPanel from '../components/notification/NotificationPanel';
 
 const HomePage = () => {
   const {checkAuth, authUser, onlineUsers} = useAuthStore();
@@ -27,6 +28,7 @@ const HomePage = () => {
       ${selectedUser ? "hidden md:flex" : "flex"}
       flex-col h-full md:w-80 w-full bg-white dark:bg-gray-800 border-r border-gray-300`}
     >
+    {currentPage === 'notificationpanel' && <NotificationPanel />}
     {currentPage === 'conversation' && <Conversation />}
     {currentPage === 'profile' && <UserProfile />}
     {currentPage === 'addfriend' && <AddFriend />}
